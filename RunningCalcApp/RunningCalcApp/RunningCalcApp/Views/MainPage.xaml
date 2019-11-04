@@ -157,7 +157,7 @@
             <StackLayout Orientation="Horizontal">
                 <Label Text="Date of Birth" Style="{StaticResource labelStyle}"/>
                 <!--PropertyChanged="DOBPreference"-->
-                <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="100">
+                <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="120">
                 </DatePicker>
                 </StackLayout>
             <Button x:Name="creditLink" Text="Credits" Clicked="creditButton" Style="{StaticResource btnStyle}"/>
