@@ -5,30 +5,164 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             mc:Ignorable="d"
             xmlns:views="clr-namespace:RunningCalcApp.Views"
-            x:Class="RunningCalcApp.Views.MainPage">
+            x:Class="RunningCalcApp.Views.MainPage" 
+            BarBackgroundColor="White" 
+            BarTextColor="LightCoral"
+            Padding="10">
 
-    <TabbedPage.Children>
-        <NavigationPage Title="Browse">
-            <NavigationPage.Icon>
-                <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS" Value="tab_feed.png"/>
-                </OnPlatform>
-            </NavigationPage.Icon>
-            <x:Arguments>
-                <views:ItemsPage />
-            </x:Arguments>
-        </NavigationPage>
-        
-        <NavigationPage Title="About">
-            <NavigationPage.Icon>
-                <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS" Value="tab_about.png"/>
-                </OnPlatform>
-            </NavigationPage.Icon>
-            <x:Arguments>
-                <views:AboutPage />
-            </x:Arguments>
-        </NavigationPage>
-    </TabbedPage.Children>
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style x:Key="btnStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="LightCoral"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
+
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#3D90BF"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+
+            <Style x:Key="pickerStyle" TargetType="Picker">
+                <Setter Property="BackgroundColor" Value="LightCoral"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+
+            <Style x:Key="dateStyle" TargetType="DatePicker">
+                <Setter Property="BackgroundColor" Value="LightCoral"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+
+            <Style x:Key="instructionStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#3D90BF"/>
+                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+
+            <Style x:Key="HeaderStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="#3D90BF"/>
+                <Setter Property="FontSize" Value="Large"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="10"/>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+    
+    <!--Grade Page-->
+    <ContentPage Title="Grade">
+        <StackLayout>
+            <Label Text="Runner Age Grade" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Please select the distance you ran, in what amount of time in order to see your age grade." Style="{StaticResource instructionStyle}"/>
+            <!--picker, 3 entries, 2 labels-->
+            <Label Text="Distance:" Style="{StaticResource labelStyle}"/>
+            <Picker x:Name="miles" SelectedIndexChanged ="ageGrade"  Style="{StaticResource pickerStyle}">
+                <!-- SelectedIndexChanged="ageGrade"-->
+                <Picker.Items>
+                    <x:String>1m</x:String>
+                    <x:String>5k</x:String>
+                    <x:String>10k</x:String>
+                    <x:String>half marathon</x:String>
+                    <x:String>marathon</x:String>
+                </Picker.Items>
+                <!--<Picker.SelectedIndex>0</Picker.SelectedIndex>-->
+            </Picker>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Hours: " Style="{StaticResource labelStyle}"/>
+                <!--<Entry x:Name="hrL" Text="00" Completed="ageGrade" />-->
+                <Picker x:Name="hrP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
+                <Label Text="Minutes: " Style="{StaticResource labelStyle}"/>
+                <!--<Entry x:Name="minL" Text="00" />-->
+                <Picker x:Name="minP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
+                <Label Text="Seconds: " Style="{StaticResource labelStyle}"/>
+                <!--<Entry x:Name="secL" Text="00" />-->
+                <Picker x:Name="secP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
+                <!--PropertyChanged="ageGrade"-->
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Age Group: " Style="{StaticResource labelStyle}"/>
+                <Label x:Name="ageGroup" Text="" Margin="10" FontAttributes="Bold" TextColor="Black"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Age Grade: " Style="{StaticResource labelStyle}"/>
+                <Label x:Name="ageGradeLabel" Text="" Margin="10" FontAttributes="Bold" TextColor="Black"/>
+            </StackLayout>
+            <Button Text="Age Grade Info" Clicked="ageGradeInfo" Style="{StaticResource btnStyle}"/>
+        </StackLayout>
+    </ContentPage>
+
+    <!--Log Page-->
+    <ContentPage Title="Log">
+        <StackLayout>
+            <Label Text="Runner Log" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Please enter in the distance you ran in otder to add it to your log." Style="{StaticResource instructionStyle}"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Distance (in miles)" Style="{StaticResource labelStyle}"/>
+                <Entry x:Name="LogDistance" Text="" TextColor="#3D90BF" WidthRequest="50">
+                    <!--Need to insert options in c sharp-->
+                </Entry>
+            </StackLayout>
+            <Button x:Name="Add" Text="Add" Clicked="AddToLog" Style="{StaticResource btnStyle}"/>
+            <Label x:Name="noMileEntry" Text=""/>
+            <Label x:Name="TotalMiles" Style="{StaticResource labelStyle}"/>
+            <!--<Label x:Name="runLog" Text="" Style="{StaticResource labelStyle}"/-->
+            <ListView x:Name="runLoglv" HeightRequest="250">
+                <!--<ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
+                                <Label TextColor="White"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>-->
+            </ListView>
+            <!--<ListView x:Name="allRunslv" HeightRequest="300"/>-->
+        </StackLayout>
+    </ContentPage>
+
+    <!--Timer Page-->
+    <ContentPage Title="Timer">
+        <StackLayout>
+            <Label Text="Run Timer" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Here you can start and stop a timer while you run." Style="{StaticResource instructionStyle}"/>
+            <Button x:Name="Start" Text="Start" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10"/>
+            <Button x:Name="Stop" Text="Stop" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10"/>
+            <Label x:Name="Timer" Text="00:00:00" Style="{StaticResource labelStyle}" FontSize="Large" HorizontalOptions="Center"/>
+        </StackLayout>
+    </ContentPage>    
+    
+    <!--Settings Page-->
+    <ContentPage Title="Settings">
+        <StackLayout>
+            <Label Text="Runner Settings" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Please enter in your gender and age so we can properly calculate your age grade." Style="{StaticResource instructionStyle}"/>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Gender" Style="{StaticResource labelStyle}"/>
+                <Picker x:Name="GenderSelection" SelectedIndexChanged="GenderPreference" Style="{StaticResource pickerStyle}" WidthRequest="400">
+                    <Picker.Items>
+                        <x:String>Female</x:String>
+                        <x:String>Male</x:String>
+                    </Picker.Items>
+                </Picker>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Date of Birth" Style="{StaticResource labelStyle}"/>
+                <!--PropertyChanged="DOBPreference"-->
+                <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="500">
+                </DatePicker>
+                </StackLayout>
+            <Button x:Name="creditLink" Text="Credits" Clicked="creditButton" Style="{StaticResource btnStyle}"/>
+            <Image Source="MiamiLogo.png" HeightRequest="200" WidthRequest="300"/>
+        </StackLayout>
+    </ContentPage>
     
 </TabbedPage>

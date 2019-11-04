@@ -1,0 +1,1 @@
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.UWP\RunningCalcApp.UWP.csproj;x86
