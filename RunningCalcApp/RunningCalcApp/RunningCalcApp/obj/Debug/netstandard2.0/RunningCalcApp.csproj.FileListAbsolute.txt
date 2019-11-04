@@ -1,0 +1,16 @@
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\bin\Debug\netstandard2.0\RunningCalcApp.deps.json
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\bin\Debug\netstandard2.0\RunningCalcApp.dll
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\bin\Debug\netstandard2.0\RunningCalcApp.pdb
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.csprojAssemblyReference.cache
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\App.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\Views\AboutPage.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\Views\ItemDetailPage.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\Views\ItemsPage.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\Views\MainPage.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\Views\NewItemPage.xaml.g.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.csproj.CoreCompileInputs.cache
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.AssemblyInfoInputs.cache
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.AssemblyInfo.cs
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\XamlC.stamp
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.dll
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp\obj\Debug\netstandard2.0\RunningCalcApp.pdb

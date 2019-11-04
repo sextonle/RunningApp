@@ -528,5 +528,5 @@ C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\Running
 C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\obj\Debug\90\stamp\_GenerateJavaStubs.stamp
 C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\obj\Debug\90\stamp\_GeneratePackageManagerJava.stamp
 C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\obj\Debug\90\stamp\_ResolveLibraryProjectImports.stamp
-C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\bin\Debug\RunningCalcApp.dll.mdb
 C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\obj\Debug\90\res\drawable\miamilogo.png
+C:\Users\lasex\Documents\GitHub\RunningApp\RunningCalcApp\RunningCalcApp\RunningCalcApp.Android\bin\Debug\RunningCalcApp.dll.mdb

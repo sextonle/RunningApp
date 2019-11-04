@@ -147,7 +147,7 @@
             <Label Text="Please enter in your gender and age so we can properly calculate your age grade." Style="{StaticResource instructionStyle}"/>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Gender" Style="{StaticResource labelStyle}"/>
-                <Picker x:Name="GenderSelection" SelectedIndexChanged="GenderPreference" Style="{StaticResource pickerStyle}" WidthRequest="400">
+                <Picker x:Name="GenderSelection" SelectedIndexChanged="GenderPreference" Style="{StaticResource pickerStyle}" WidthRequest="75">
                     <Picker.Items>
                         <x:String>Female</x:String>
                         <x:String>Male</x:String>
@@ -157,7 +157,7 @@
             <StackLayout Orientation="Horizontal">
                 <Label Text="Date of Birth" Style="{StaticResource labelStyle}"/>
                 <!--PropertyChanged="DOBPreference"-->
-                <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="500">
+                <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="100">
                 </DatePicker>
                 </StackLayout>
             <Button x:Name="creditLink" Text="Credits" Clicked="creditButton" Style="{StaticResource btnStyle}"/>
