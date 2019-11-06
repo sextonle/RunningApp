@@ -22,25 +22,24 @@ namespace RunningCalcApp.Views
     {
         SQLiteConnection conn;
         public bool timerStart = false;
-        int totalSeconds = 0;
         Stopwatch sw = new Stopwatch();
         TimeSpan prevTime;
-        bool resetSW = false;
         public MainPage()
         {
             InitializeComponent();
 
+            //setting all preferences
             GenderSelection.SelectedItem = Preferences.Get("Gender", "");
             DOBSelection.Date = Preferences.Get("DOB", DateTime.Today);
             var timerPref = Preferences.Get("Time", "00:00:00:0000000");
             Timer.Text = timerPref;
-            //sw.Elapsed.Add(TimeSpan.Parse(timerPref));//.Add(//sw.Elapsed);
             prevTime = TimeSpan.Parse(timerPref);
             Start.IsEnabled = Preferences.Get("StartBtn", true);
             Stop.IsEnabled = Preferences.Get("StopBtn", true);
             Reset.IsEnabled = Preferences.Get("ResetBtn", true);
             timerStart = Preferences.Get("TimerStarted", false);
 
+            //setting up databases
             string libFolder = FileSystem.AppDataDirectory;
             string fname = System.IO.Path.Combine(libFolder, "Personnel.db");
             conn = new SQLiteConnection(fname);
@@ -54,23 +53,22 @@ namespace RunningCalcApp.Views
             LoadMensRecords();
             LoadWomensRecords();
 
+            //continue running the timer if the application was stopped while running
             bool contTimer = Preferences.Get("ContTimer", false);
             if(contTimer)
             {
-                //get curent time
-
-                //redo device .stzrtimer 
                 timer();
             }
-        }
+        }//end constructor
 
+        /*Populate the running log that is already in the database*/
         public void populateLog()
         {
             var l1 = from r in conn.Table<Run>()
                                    select r.Date + " " + r.Miles + " miles";
             runLoglv.ItemsSource = l1.Reverse();
         }
-
+        /*calculate total miles run from the log*/
         public void populateTotalMiles()
         {
             int intMiles = 0;
@@ -87,12 +85,14 @@ namespace RunningCalcApp.Views
             TotalMiles.Text = intMiles.ToString() + " miles run";
         }
 
+        /*setting gender preference*/
         public void GenderPreference(object sender, EventArgs e)
         {
             string property = (string)GenderSelection.SelectedItem;
             Preferences.Set("Gender", property.ToString());
         }
 
+        /*setting date of birth preference*/
         public void DOBPreference(object sender, EventArgs e)
         {
             var property = DOBSelection.Date;
@@ -100,24 +100,7 @@ namespace RunningCalcApp.Views
             displayAgeGroup();
         }
 
-       /* public void TimerPreference(object sender, EventArgs e)
-        {
-            /*TimeSpan t = new TimeSpan(0, 0, 0);
-            //if(!sw.Elapsed.Equals(t))
-            if(!resetSW)
-            {
-                //var property = sw.Elapsed;
-
-                //Preferences.Set("Time", property.ToString());
-                //Preferences.Set("Time", Preferences.Get("Time", "00:00:00:0000000").ToString());
-            }
-            else if (resetSW)
-            {
-                var property = sw.Elapsed;
-                Preferences.Set("Time", t.ToString());
-            }
-        }*/
-
+        /*populating the pickers for hours, mins, secs, on age grade page*/
         public void pickerPop()
         {
             List<int> vals = new List<int>();
@@ -125,26 +108,22 @@ namespace RunningCalcApp.Views
             {
                 vals.Add(i);
             }
-            hrP.ItemsSource = vals;
+
+            List<int> hourvals = new List<int>();
+            for (int i = 0; i < 13; i++)
+            {
+                hourvals.Add(i);
+            }
+
+            hrP.ItemsSource = hourvals;
             minP.ItemsSource = vals;
             secP.ItemsSource = vals;
         }
 
+        /*Event handler for timer page buttons*/
         public void TimerClicked(object sender, EventArgs e) 
         {
-            //var stopwatch = new System.Diagnostics.Stopwatch();
             Button b = (Button)sender;
-            //bool cont = false;
-            /*Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-            {
-                if (cont)
-                {
-                    Timer.Text += "TICK";
-                    return true; // True = Repeat again, False = Stop the timer
-                }
-
-                return false; // True = Repeat again, False = Stop the timer
-            });*/
             if(b.Text.Equals("Start"))
             {
                 Preferences.Set("ContTimer", true);
@@ -156,8 +135,7 @@ namespace RunningCalcApp.Views
                 binding.Mode = BindingMode.TwoWay;
                 binding.Source = sw;
                 binding.Path = sw.Elapsed.ToString();
-                Timer.SetBinding(Label.TextProperty, binding);//////////////////////////////////////////
-                //sw.Start();
+                Timer.SetBinding(Label.TextProperty, binding);
                 timer();   
             }
             if(b.Text.Equals("Stop"))
@@ -169,8 +147,6 @@ namespace RunningCalcApp.Views
                 timerStart = false;
                 sw.Stop();
                 Preferences.Set("Time", Timer.Text);
-                //prevTime = sw.Elapsed;
-               // Preferences.Set("PrevTime", sw.Elapsed.ToString());
             }
             if(b.Text.Equals("Reset"))
             {
@@ -185,15 +161,16 @@ namespace RunningCalcApp.Views
                 Preferences.Set("Time", Timer.Text);
                 prevTime = TimeSpan.Parse(Preferences.Get("Time", Timer.Text));
             }
+            //set preferences that were changed
             Preferences.Set("StartBtn", Start.IsEnabled);
             Preferences.Set("StopBtn", Stop.IsEnabled);
             Preferences.Set("ResetBtn", Reset.IsEnabled);
             Preferences.Set("TimerStarted", timerStart);
         }
 
+        /*function called to start timer ever few miliseconds*/
         public void timer()
         {
-            
             sw.Start();
             Device.StartTimer(TimeSpan.FromMilliseconds(1.0), () =>
             {
@@ -203,39 +180,7 @@ namespace RunningCalcApp.Views
             }); 
         }
 
-        /*public void timer() /////fix the over 60 issue>>>>>>>>>>>>>>>>>>>>
-        {
-            //int totalSeconds = 0;
-            int seconds = 0;
-            int hour = 0;
-            int min = 0;
-            int sec = 0;
-            Device.StartTimer(TimeSpan.FromSeconds(1), () =>
-           //Device.StartTimer(new TimeSpan(0, 0, 1) () =>
-            {
-                seconds++;
-                totalSeconds++;
-
-                hour = (int)(totalSeconds / 3600);
-                min = (int)(totalSeconds / 60);
-               // int sec = (int)(totalSeconds / 1);
-               if(seconds > 59)
-                {
-                    seconds = 0;
-                    //sec = seconds;
-                }
-               sec = seconds;
-                string t = string.Format("{0:00}:{1:00}:{2:00}", hour, min, sec);
-                /*string secs = totalSeconds.ToString();
-                var interval = TimeSpan.ParseExact(secs, "%s", null, TimeSpanStyles.AssumeNegative);
-                Timer.Text = string.Format("{0}", interval); it ends here////////
-                Timer.Text = t;
-                //seconds++;
-                //totalSeconds++;
-                return timerStart;
-            });
-        }*/
-
+        /*adding valid entries to a log*/
         private void AddToLog(object sender, EventArgs e)
         {
             if (LogDistance.Text.Equals("") || (!Regex.IsMatch(LogDistance.Text, @"^\d+$")))
@@ -253,17 +198,20 @@ namespace RunningCalcApp.Views
             }
         }
 
+        /*url for the credits button*/
         private void creditButton(object sender, EventArgs e)
         {
             Device.OpenUri(new Uri("https://www.miamioh.edu/"));
         }
 
-
+        /*displaying the age group based off the age*/
         public void displayAgeGroup()
         {
             int ageDisplay = getAge();
             calcAgeGroup(ageDisplay);
         }
+
+        /*displaying the age grade of the person*/
         private void ageGrade(object sender, EventArgs e)
         {
             
@@ -274,20 +222,16 @@ namespace RunningCalcApp.Views
                 string ageGroup = calcAgeGroup(age);
                 string gender = Preferences.Get("Gender", "");
                 TimeSpan personTS = new TimeSpan(Convert.ToInt32(hrP.SelectedItem), Convert.ToInt32(minP.SelectedItem), Convert.ToInt32(secP.SelectedItem));
-                //TimeSpan personTS = new TimeSpan(Convert.ToInt32(hrL.Text), Convert.ToInt32(minL.Text), Convert.ToInt32(secL.Text));
                 if (gender.Equals("Male")) {
                     var time = from data in conn.Table<MensRecord>()
                                where ((data.Distance.Equals(miles.SelectedItem)) && (data.Age.Equals(ageGroup)))
                                select data.Time;
                     string timeToComapare = time.FirstOrDefault();
-                    /*TimeSpan wrTS;
-                    wrTS = TimeSpan.Parse(time.FirstOrDefault());*/
                     TimeSpan wrTS = convertTime(timeToComapare);
                     if (personTS.Ticks != 0)
                     {
-                        double overallGrade = ((Convert.ToDouble(wrTS.Ticks) / Convert.ToDouble(personTS.Ticks)) * 100.0);//wr divided theirs
+                        double overallGrade = ((Convert.ToDouble(wrTS.Ticks) / Convert.ToDouble(personTS.Ticks)) * 100.0);
                         overallGrade = Math.Round(overallGrade, 2);
-                        //TimeSpan total = TimeSpan.FromTicks(overallGrade);
                         ageGradeLabel.Text = overallGrade.ToString();
                     }
                     else
@@ -316,6 +260,7 @@ namespace RunningCalcApp.Views
             }
         }
 
+        /*converting the time provided by file to timespan*/
         public TimeSpan convertTime(String s) 
         {
             string[] arrString = s.Split(':');
@@ -337,22 +282,23 @@ namespace RunningCalcApp.Views
             }
             if(arrString.Length == 0)
             {
-                ////something for na
+                //something for na
                 return TimeSpan.Zero;
             }
             return ts;
         }
 
+        /*url for more info on age grade*/
         private void ageGradeInfo(object sender, EventArgs e)
         {
             Device.OpenUri(new Uri("https://www.runnersworld.com/advanced/a20801263/age-grade-calculator/"));
         }
 
+        /*calcualting the age group of the user based off of DOB*/
         public string calcAgeGroup(int age)
         {
             int newAge = age - 40;
             int remaining = newAge / 5;
-            //String group;
             if (age < 40 || age > 105)
             {
                 ageGroup.Text = "Open";
@@ -365,6 +311,7 @@ namespace RunningCalcApp.Views
             return ageGroup.Text;
         }
 
+        /*getting the age of the user*/
         public int getAge()
         {
             DateTime dob = Preferences.Get("DOB", DateTime.Today);
@@ -377,6 +324,8 @@ namespace RunningCalcApp.Views
                 return now.Year - dob.Year;
             }
         }
+
+        /*loading the mens records into the database*/
         public void LoadMensRecords()
         {
             try
@@ -392,16 +341,14 @@ namespace RunningCalcApp.Views
                     string line = input.ReadLine();
                     string[] times = line.Split(',');
                     readingMens(headers, times);
-                    //MensRecord activity = MensRecord.ParseCSV(line);
-                    //conn.Insert(activity);
                 }
-
             }
             catch (Exception e)
             {
             }
         }
 
+        /*loading womens records into the database*/
         public void LoadWomensRecords()
         {
             try
@@ -425,6 +372,7 @@ namespace RunningCalcApp.Views
             }
         }
 
+        /*reading in all lines of the mens.txt file*/
         public void readingMens (String[] title, String[] distance)
         {
             for (int i = 1; i < title.Length; i++)
@@ -434,6 +382,7 @@ namespace RunningCalcApp.Views
             }
         }
 
+        /*reading in all lines of the womens.txt file*/
         public void readingWomens(String[] title, String[] distance)
         {
             for (int i = 1; i < title.Length; i++)

@@ -27,19 +27,16 @@
 
             <Style x:Key="pickerStyle" TargetType="Picker">
                 <Setter Property="TextColor" Value="Black"/>
-                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="Margin" Value="10"/>
             </Style>
 
             <Style x:Key="dateStyle" TargetType="DatePicker">
                 <Setter Property="TextColor" Value="Black"/>
-                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="Margin" Value="10"/>
             </Style>
 
             <Style x:Key="instructionStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="#3D90BF"/>
-                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="10"/>
             </Style>
@@ -48,7 +45,6 @@
                 <Setter Property="TextColor" Value="#3D90BF"/>
                 <Setter Property="FontSize" Value="Large"/>
                 <Setter Property="FontAttributes" Value="Bold"/>
-                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="HorizontalTextAlignment" Value="Center"/>
                 <Setter Property="Margin" Value="10"/>
             </Style>
@@ -60,10 +56,8 @@
         <StackLayout>
             <Label Text="Age Grade" Style="{StaticResource HeaderStyle}"/>
             <Label Text="Please select the distance you ran, in what amount of time in order to see your age grade." Style="{StaticResource instructionStyle}"/>
-            <!--picker, 3 entries, 2 labels-->
             <Label Text="Distance:" Style="{StaticResource labelStyle}"/>
             <Picker x:Name="miles" SelectedIndexChanged ="ageGrade"  Style="{StaticResource pickerStyle}">
-                <!-- SelectedIndexChanged="ageGrade"-->
                 <Picker.Items>
                     <x:String>1m</x:String>
                     <x:String>5k</x:String>
@@ -71,19 +65,14 @@
                     <x:String>half marathon</x:String>
                     <x:String>marathon</x:String>
                 </Picker.Items>
-                <!--<Picker.SelectedIndex>0</Picker.SelectedIndex>-->
             </Picker>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Hours: " Style="{StaticResource labelStyle}"/>
-                <!--<Entry x:Name="hrL" Text="00" Completed="ageGrade" />-->
                 <Picker x:Name="hrP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
                 <Label Text="Minutes: " Style="{StaticResource labelStyle}"/>
-                <!--<Entry x:Name="minL" Text="00" />-->
                 <Picker x:Name="minP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
                 <Label Text="Seconds: " Style="{StaticResource labelStyle}"/>
-                <!--<Entry x:Name="secL" Text="00" />-->
                 <Picker x:Name="secP" SelectedIndexChanged="ageGrade" WidthRequest="30"/>
-                <!--PropertyChanged="ageGrade"-->
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Age Group: " Style="{StaticResource labelStyle}"/>
@@ -105,25 +94,13 @@
             <StackLayout Orientation="Horizontal">
                 <Label Text="Distance (in miles)" Style="{StaticResource labelStyle}"/>
                 <Entry x:Name="LogDistance" Text="" TextColor="Black" WidthRequest="50">
-                    <!--Need to insert options in c sharp-->
                 </Entry>
             </StackLayout>
             <Button x:Name="Add" Text="Add" Clicked="AddToLog" Style="{StaticResource btnStyle}"/>
             <Label x:Name="noMileEntry" Text=""/>
             <Label x:Name="TotalMiles" Style="{StaticResource labelStyle}"/>
-            <!--<Label x:Name="runLog" Text="" Style="{StaticResource labelStyle}"/-->
             <ListView x:Name="runLoglv" HeightRequest="250">
-                <!--<ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label TextColor="White"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>-->
             </ListView>
-            <!--<ListView x:Name="allRunslv" HeightRequest="300"/>-->
         </StackLayout>
     </ContentPage>
 
@@ -157,7 +134,6 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Date of Birth" Style="{StaticResource labelStyle}"/>
-                <!--PropertyChanged="DOBPreference"-->
                 <DatePicker x:Name="DOBSelection" DateSelected="DOBPreference" Style="{StaticResource dateStyle}" WidthRequest="120">
                 </DatePicker>
                 </StackLayout>
