@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace RunningCalcApp.Views
 {
@@ -22,12 +23,23 @@ namespace RunningCalcApp.Views
         SQLiteConnection conn;
         public bool timerStart = false;
         int totalSeconds = 0;
+        Stopwatch sw = new Stopwatch();
+        TimeSpan prevTime;
+        bool resetSW = false;
         public MainPage()
         {
             InitializeComponent();
 
             GenderSelection.SelectedItem = Preferences.Get("Gender", "");
-            DOBSelection.Date = Preferences.Get("DOB", DateTime.Today);      
+            DOBSelection.Date = Preferences.Get("DOB", DateTime.Today);
+            var timerPref = Preferences.Get("Time", "00:00:00:0000000");
+            Timer.Text = timerPref;
+            //sw.Elapsed.Add(TimeSpan.Parse(timerPref));//.Add(//sw.Elapsed);
+            prevTime = TimeSpan.Parse(timerPref);
+            Start.IsEnabled = Preferences.Get("StartBtn", true);
+            Stop.IsEnabled = Preferences.Get("StopBtn", true);
+            Reset.IsEnabled = Preferences.Get("ResetBtn", true);
+            timerStart = Preferences.Get("TimerStarted", false);
 
             string libFolder = FileSystem.AppDataDirectory;
             string fname = System.IO.Path.Combine(libFolder, "Personnel.db");
@@ -38,14 +50,18 @@ namespace RunningCalcApp.Views
 
             pickerPop();
             populateLog();
+            populateTotalMiles();
             LoadMensRecords();
             LoadWomensRecords();
-        }
 
-        protected override void OnAppearing()
-        {
-            //base.OnAppearing();
-            populateLog();
+            bool contTimer = Preferences.Get("ContTimer", false);
+            if(contTimer)
+            {
+                //get curent time
+
+                //redo device .stzrtimer 
+                timer();
+            }
         }
 
         public void populateLog()
@@ -53,6 +69,22 @@ namespace RunningCalcApp.Views
             var l1 = from r in conn.Table<Run>()
                                    select r.Date + " " + r.Miles + " miles";
             runLoglv.ItemsSource = l1.Reverse();
+        }
+
+        public void populateTotalMiles()
+        {
+            int intMiles = 0;
+            var miles = from m in conn.Table<Run>()
+                        where m.Miles != null
+                        select m.Miles;
+            foreach(var mi in miles)
+            {
+                if(Regex.IsMatch(mi, @"^\d+$") && mi != null)
+                {
+                    intMiles += Convert.ToInt32(mi);
+                }
+            }
+            TotalMiles.Text = intMiles.ToString() + " miles run";
         }
 
         public void GenderPreference(object sender, EventArgs e)
@@ -65,7 +97,26 @@ namespace RunningCalcApp.Views
         {
             var property = DOBSelection.Date;
             Preferences.Set("DOB", property);
+            displayAgeGroup();
         }
+
+       /* public void TimerPreference(object sender, EventArgs e)
+        {
+            /*TimeSpan t = new TimeSpan(0, 0, 0);
+            //if(!sw.Elapsed.Equals(t))
+            if(!resetSW)
+            {
+                //var property = sw.Elapsed;
+
+                //Preferences.Set("Time", property.ToString());
+                //Preferences.Set("Time", Preferences.Get("Time", "00:00:00:0000000").ToString());
+            }
+            else if (resetSW)
+            {
+                var property = sw.Elapsed;
+                Preferences.Set("Time", t.ToString());
+            }
+        }*/
 
         public void pickerPop()
         {
@@ -79,9 +130,9 @@ namespace RunningCalcApp.Views
             secP.ItemsSource = vals;
         }
 
-        public void TimerClicked(object sender, EventArgs e) ///////need to display time save ---preferences?
+        public void TimerClicked(object sender, EventArgs e) 
         {
-            var stopwatch = new System.Diagnostics.Stopwatch();
+            //var stopwatch = new System.Diagnostics.Stopwatch();
             Button b = (Button)sender;
             //bool cont = false;
             /*Device.StartTimer(TimeSpan.FromSeconds(1), () =>
@@ -96,21 +147,63 @@ namespace RunningCalcApp.Views
             });*/
             if(b.Text.Equals("Start"))
             {
+                Preferences.Set("ContTimer", true);
                 Start.IsEnabled = false;
                 Stop.IsEnabled = true;
+                Reset.IsEnabled = false;
                 timerStart = true;
-                timer();
-                
+                Binding binding = new Binding();
+                binding.Mode = BindingMode.TwoWay;
+                binding.Source = sw;
+                binding.Path = sw.Elapsed.ToString();
+                Timer.SetBinding(Label.TextProperty, binding);//////////////////////////////////////////
+                //sw.Start();
+                timer();   
             }
             if(b.Text.Equals("Stop"))
             {
+                Preferences.Set("ContTimer", false);
                 Stop.IsEnabled = false;
                 Start.IsEnabled = true;
+                Reset.IsEnabled = true;
                 timerStart = false;
-            }  
+                sw.Stop();
+                Preferences.Set("Time", Timer.Text);
+                //prevTime = sw.Elapsed;
+               // Preferences.Set("PrevTime", sw.Elapsed.ToString());
+            }
+            if(b.Text.Equals("Reset"))
+            {
+                Preferences.Set("ContTimer", false);
+                
+                Start.IsEnabled = true;
+                Stop.IsEnabled = false;
+                Reset.IsEnabled = false;
+                timerStart = false;
+                sw.Stop();
+                Timer.Text = "00:00:00";
+                Preferences.Set("Time", Timer.Text);
+                prevTime = TimeSpan.Parse(Preferences.Get("Time", Timer.Text));
+            }
+            Preferences.Set("StartBtn", Start.IsEnabled);
+            Preferences.Set("StopBtn", Stop.IsEnabled);
+            Preferences.Set("ResetBtn", Reset.IsEnabled);
+            Preferences.Set("TimerStarted", timerStart);
         }
 
-        public void timer() /////fix the over 60 issue>>>>>>>>>>>>>>>>>>>>
+        public void timer()
+        {
+            
+            sw.Start();
+            Device.StartTimer(TimeSpan.FromMilliseconds(1.0), () =>
+            {
+                Timer.Text = (prevTime + sw.Elapsed).ToString();
+                Preferences.Set("Time", Timer.Text);
+                return timerStart;
+            }); 
+        }
+
+        /*public void timer() /////fix the over 60 issue>>>>>>>>>>>>>>>>>>>>
         {
             //int totalSeconds = 0;
             int seconds = 0;
@@ -135,13 +228,13 @@ namespace RunningCalcApp.Views
                 string t = string.Format("{0:00}:{1:00}:{2:00}", hour, min, sec);
                 /*string secs = totalSeconds.ToString();
                 var interval = TimeSpan.ParseExact(secs, "%s", null, TimeSpanStyles.AssumeNegative);
-                Timer.Text = string.Format("{0}", interval);*/
+                Timer.Text = string.Format("{0}", interval); it ends here////////
                 Timer.Text = t;
-                /*seconds++;
-                totalSeconds++;*/
+                //seconds++;
+                //totalSeconds++;
                 return timerStart;
             });
-        }
+        }*/
 
         private void AddToLog(object sender, EventArgs e)
         {
@@ -156,17 +249,7 @@ namespace RunningCalcApp.Views
                 Run newRun = new Run { Date = today.ToShortDateString(), Miles = LogDistance.Text };
                 conn.Insert(newRun);
                 populateLog();
-                /*List<Run> allRuns = conn.Table<Run>().ToList();
-                int total = 0;
-                runLog.Text = "";
-                foreach (Run r in allRuns)
-                {
-                    string temp = runLog.Text;
-                    string current = r.Date.ToString() + " " + r.Miles.ToString() + " miles";
-                    total += Int32.Parse(r.Miles);
-                    runLog.Text = current + "\n" + temp;
-                }
-                TotalMiles.Text = total.ToString() + " miles run";*/   
+                populateTotalMiles();  
             }
         }
 
@@ -175,11 +258,18 @@ namespace RunningCalcApp.Views
             Device.OpenUri(new Uri("https://www.miamioh.edu/"));
         }
 
+
+        public void displayAgeGroup()
+        {
+            int ageDisplay = getAge();
+            calcAgeGroup(ageDisplay);
+        }
         private void ageGrade(object sender, EventArgs e)
         {
+            
             if ((hrP.SelectedIndex >= 0) && (minP.SelectedIndex >= 0) && (secP.SelectedIndex >= 0) && (miles.SelectedIndex >= 0)) {
 
-
+                displayAgeGroup();
                 int age = getAge();
                 string ageGroup = calcAgeGroup(age);
                 string gender = Preferences.Get("Gender", "");

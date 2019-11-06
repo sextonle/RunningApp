@@ -26,16 +26,14 @@
             </Style>
 
             <Style x:Key="pickerStyle" TargetType="Picker">
-                <Setter Property="BackgroundColor" Value="LightCoral"/>
-                <Setter Property="TextColor" Value="White"/>
-                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="Margin" Value="10"/>
             </Style>
 
             <Style x:Key="dateStyle" TargetType="DatePicker">
-                <Setter Property="BackgroundColor" Value="LightCoral"/>
-                <Setter Property="TextColor" Value="White"/>
-                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="Black"/>
+                <!--<Setter Property="FontAttributes" Value="Bold"/>-->
                 <Setter Property="Margin" Value="10"/>
             </Style>
 
@@ -60,7 +58,7 @@
     <!--Grade Page-->
     <ContentPage Title="Grade">
         <StackLayout>
-            <Label Text="Runner Age Grade" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Age Grade" Style="{StaticResource HeaderStyle}"/>
             <Label Text="Please select the distance you ran, in what amount of time in order to see your age grade." Style="{StaticResource instructionStyle}"/>
             <!--picker, 3 entries, 2 labels-->
             <Label Text="Distance:" Style="{StaticResource labelStyle}"/>
@@ -89,24 +87,24 @@
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Age Group: " Style="{StaticResource labelStyle}"/>
-                <Label x:Name="ageGroup" Text="" Margin="10" FontAttributes="Bold" TextColor="Black"/>
+                <Label x:Name="ageGroup" Text="" Margin="10" TextColor="Black"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Age Grade: " Style="{StaticResource labelStyle}"/>
-                <Label x:Name="ageGradeLabel" Text="" Margin="10" FontAttributes="Bold" TextColor="Black"/>
+                <Label x:Name="ageGradeLabel" Text="" Margin="10" TextColor="Black"/>
             </StackLayout>
-            <Button Text="Age Grade Info" Clicked="ageGradeInfo" Style="{StaticResource btnStyle}"/>
+            <Button Text="Age Grade Information" Clicked="ageGradeInfo" Style="{StaticResource btnStyle}"/>
         </StackLayout>
     </ContentPage>
 
     <!--Log Page-->
     <ContentPage Title="Log">
         <StackLayout>
-            <Label Text="Runner Log" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Log" Style="{StaticResource HeaderStyle}"/>
             <Label Text="Please enter in the distance you ran in otder to add it to your log." Style="{StaticResource instructionStyle}"/>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Distance (in miles)" Style="{StaticResource labelStyle}"/>
-                <Entry x:Name="LogDistance" Text="" TextColor="#3D90BF" WidthRequest="50">
+                <Entry x:Name="LogDistance" Text="" TextColor="Black" WidthRequest="50">
                     <!--Need to insert options in c sharp-->
                 </Entry>
             </StackLayout>
@@ -132,18 +130,21 @@
     <!--Timer Page-->
     <ContentPage Title="Timer">
         <StackLayout>
-            <Label Text="Run Timer" Style="{StaticResource HeaderStyle}"/>
-            <Label Text="Here you can start and stop a timer while you run." Style="{StaticResource instructionStyle}"/>
+            <Label Text="Timer" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Here you can have a timer calculating your time in milliseconds while you run." Style="{StaticResource instructionStyle}"/>
             <Button x:Name="Start" Text="Start" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10"/>
-            <Button x:Name="Stop" Text="Stop" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10"/>
-            <Label x:Name="Timer" Text="00:00:00" Style="{StaticResource labelStyle}" FontSize="Large" HorizontalOptions="Center"/>
+            <Label x:Name="Timer" Style="{StaticResource labelStyle}" FontSize="Large" HorizontalOptions="Center"/>
+            <StackLayout Orientation="Horizontal">
+                <Button x:Name="Stop" Text="Stop" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10" HorizontalOptions="FillAndExpand"/>
+                <Button x:Name="Reset" Text="Reset" Clicked="TimerClicked" Style="{StaticResource btnStyle}" Margin="0,10,0,10" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
         </StackLayout>
     </ContentPage>    
     
     <!--Settings Page-->
     <ContentPage Title="Settings">
         <StackLayout>
-            <Label Text="Runner Settings" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="Settings" Style="{StaticResource HeaderStyle}"/>
             <Label Text="Please enter in your gender and age so we can properly calculate your age grade." Style="{StaticResource instructionStyle}"/>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Gender" Style="{StaticResource labelStyle}"/>
